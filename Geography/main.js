@@ -50,10 +50,10 @@ fillOpacity:0.6
 .bindPopup(popupContent);
 
 marker.addTo(map);
-markers2.push(marker2);
+//markers2.push(marker2);
 }
-layer2 = L.layerGroup(markers2).addTo(map);
-legend.addOverlay(layer2,"LanguageServices")
+//layer2 = L.layerGroup(markers2).addTo(map);
+//legend.addOverlay(layer2,"LanguageServices")
         }
     );
     
