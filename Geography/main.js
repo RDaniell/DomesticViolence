@@ -21,13 +21,6 @@ const map = L.map('map', {
 })
     .addTo(map);
 
-
-
-
-
-
-
-
     //var Stadia_AlidadeSmooth = L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png', {
 	//maxzoom: 20,
 	//attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
@@ -57,7 +50,10 @@ fillOpacity:0.6
 .bindPopup(popupContent);
 
 marker.addTo(map);
+markers2.push(marker2);
 }
+layer2 = L.layerGroup(markers2).addTo(map);
+legend.addOverlay(layer2,"LanguageServices")
         }
     );
     
