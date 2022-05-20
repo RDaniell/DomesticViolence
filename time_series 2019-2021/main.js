@@ -23,7 +23,7 @@ d3.csv('../data/DV-NYPD-Radiorun.csv', d => {
   const formattedObj = {
     Borough: d.Borough,
     RadioRuns: +d.RadioRuns,
-    Year: new Date(+d.Year, 0, 1), // (year, month, day)
+    Year: new Date(+d.Year), // (year, month, day)
     //Year2:+d.Year
   }
   return formattedObj
