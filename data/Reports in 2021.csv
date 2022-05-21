@@ -1,4 +1,6 @@
-Complaints,count
-RapeComplaints,356
-FelonyAssaultComplaints,5535
-MurderComplaints,61
+Borough,count
+Manhattan,18
+Bronx,12
+Brooklyn,16
+Queens,13
+Staten Island,2
