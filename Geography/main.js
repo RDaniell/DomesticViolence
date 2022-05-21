@@ -1,6 +1,6 @@
 const map = L.map('map', {
     center: [40.789433, -73.947589],
-    zoom: 16,
+    zoom: 13,
     scrollWheelzoom: true
 });
 //const basemapStamenTerrain = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.{ext}', {
@@ -53,7 +53,6 @@ marker.addTo(map);
 
 }
 
-legend.addOverlay(layer2,"LanguageServices")
         }
     );
     
