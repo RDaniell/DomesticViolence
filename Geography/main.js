@@ -27,13 +27,12 @@ const map = L.map('map', {
 
 
 
-    //$.get('../data/ENGBV_Resource_Directory.csv', function(
-        //csvString) {
-//const data = Papa.parse(
-    //csvString, {header: true, dynamicTyping: true}).data;
-//console.log(data)
-console.log(data1)
-console.log(data2)
+    $.get('../data/ENGBV_Resource_Directory.csv', function(
+        csvString) {
+const data = Papa.parse(
+    csvString, {header: true, dynamicTyping: true}).data;
+console.log(data)
+
 for (var i in data) {
     var row = data[i];
 
@@ -52,11 +51,4 @@ fillOpacity:0.6
 .bindPopup(popupContent);
 
 marker.addTo(map);
-
-markers2.push(marker2);
-}
-layer2 = L.layerGroup(markers2).addTo(map);
-legend.addOverlay(layer2,"LanguageServices")
-        }
-    );
     
