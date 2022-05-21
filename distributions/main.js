@@ -155,14 +155,28 @@ function draw() {
 
 // }
 // )
+svg.append("text")
+.attr("class", "xLabel")
+.attr("y", height-0.1)
+.attr("x", width/2)
+.text("fill", "navy")
+.text("Precinct")),
 
-      // + HANDLE UPDATE SELECTION
-      update => update,
-      // + HANDLE EXIT SELECTION
-      exit => exit
-        .remove()
+svg.append("text")
+.attr("class", "yLabel")
+.attr("transform","rotate(-90)")
+.attr("y",10)
+.attr("x", 0 - (height/ 1.7))
+.text("Number of Cases reported")
+
+
+      // // + HANDLE UPDATE SELECTION
+      // update => update,
+      // // + HANDLE EXIT SELECTION
+      // exit => exit
+      //   .remove()
       )
-    );
+   
       }
 
 
