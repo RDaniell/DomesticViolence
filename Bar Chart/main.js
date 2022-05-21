@@ -15,7 +15,7 @@ const margins = { top: 10, bottom: 25, left: 10, right: 10 };
 // you can view the data output from this in console in browser
 
 
-d3.csv('../data/DV-NYPD-Radiorun.csv', d3.autoType).then(data => {
+d3.csv('../data/Reports in 2021.csv', d3.autoType).then(data => {
     console.log("data", data)
 
     
