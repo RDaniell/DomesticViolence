@@ -51,4 +51,6 @@ fillOpacity:0.6
 .bindPopup(popupContent);
 
 marker.addTo(map);
-    
+}
+}
+    );
