@@ -61,7 +61,7 @@ function init() {
   const xAxis = d3.axisBottom(xScale)
   const yAxis = d3.axisLeft(yScale)
 
-  // + UI ELEMENT SETUP
+  // + UI ELEMENT SETUP // I have commented this out because it won't have a drop down
   //const selectElement = d3.select("#dropdown")
 
 //   selectElement.selectAll("option")
