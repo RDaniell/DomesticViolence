@@ -12,17 +12,28 @@ const map = L.map('map', {
 })
     .addTo(map);
 
-    //var Stadia_AlidadeSmooth = L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png', {
-	//maxzoom: 20,
-	//attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
-    //})
-    //.addTo(map);
 
     $.get('../data/ENGBV_Resource_Directory.csv', function(
         csvString) {
-const data = Papa.parse(
-    csvString, {header: true, dynamicTyping: true}).data;
-console.log(data)
+            data1 = Papa.parse(
+                csvString, {header: true, dynamicTyping: true}).
+               data.filter(
+                   function(row) {return row.Shift ==="FIRSTLANGUAGE"}
+                    )
+                data2 = Papa.parse(csvString, {header: true,
+               dynamicTyping: true}).data.filter(
+                    function(row) {return row.Shift === "SECONDLANGUAGE"}
+                );
+
+
+
+    //$.get('../data/ENGBV_Resource_Directory.csv', function(
+        //csvString) {
+//const data = Papa.parse(
+    //csvString, {header: true, dynamicTyping: true}).data;
+//console.log(data)
+console.log(data1)
+console.log(data2)
 for (var i in data) {
     var row = data[i];
 
@@ -41,10 +52,11 @@ fillOpacity:0.6
 .bindPopup(popupContent);
 
 marker.addTo(map);
-//markers2.push(marker2);
+
+markers2.push(marker2);
 }
-//layer2 = L.layerGroup(markers2).addTo(map);
-//legend.addOverlay(layer2,"LanguageServices")
+layer2 = L.layerGroup(markers2).addTo(map);
+legend.addOverlay(layer2,"LanguageServices")
         }
     );
     
