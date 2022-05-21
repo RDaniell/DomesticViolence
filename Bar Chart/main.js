@@ -23,7 +23,7 @@ d3.csv('../data/Reports in 2021.csv', d3.autoType).then(data => {
 
     // create SCALES first using variables
     // each scale needs a scale type
-    // X Scale is type categorical, based on Complaints data
+    // X Scale is type categorical, based on Borough data
     // for X categorical type use d3.scaleBand
     // Y Scale is type continuous quantitative numeric
     // for Y numeric type use d3.scaleLinear
@@ -32,7 +32,7 @@ d3.csv('../data/Reports in 2021.csv', d3.autoType).then(data => {
     // RANGE is your VISUAL categories/min/max
     // scale provides translator between data and visuals
     // for X scale range - visual min 0 and max the window width
-    // for X scale domain - our Complaints types
+    // for X scale domain - our Borough types
     // x domain as "running" "chasing" but pull dynamic data
     // y scale linear so Domain is max and min values to display
     // frequently desired linear min value is 0
@@ -40,7 +40,7 @@ d3.csv('../data/Reports in 2021.csv', d3.autoType).then(data => {
     // Y range saying "max lowpoint of ___ then back to zero"
 
     const xScale = d3.scaleBand()
-    .domain(data.map(d=> d.Complaints))
+    .domain(data.map(d=> d.Borough))
     .range([0, width])
 
  
@@ -51,7 +51,7 @@ d3.csv('../data/Reports in 2021.csv', d3.autoType).then(data => {
         // see color scales reference here: https://github.com/d3/d3-scale-chromatic
 
     const colorScale = d3.scaleOrdinal(d3.schemeDark2)
-    .domain(data.map(d=> d.Complaints))
+    .domain(data.map(d=> d.Borough))
     // can define with your own range per category and empty parens
     // or can define using d3.scheme__ in parens
     //.range(["aqua", "lightblue", "blue","darkblue","black"])
@@ -98,46 +98,46 @@ d3.csv('../data/Reports in 2021.csv', d3.autoType).then(data => {
         .join("rect")
         .attr("width", xScale.bandwidth()-30)
         .attr("height", d=> height - yScale(d.count))
-        .attr("x", d=>xScale(d.Complaints)+15)
+        .attr("x", d=>xScale(d.Borough)+15)
         .attr("y", d=>yScale(d.count))
-        .attr("fill", d => colorScale(d.Complainst)) // color option
+        .attr("fill", d => colorScale(d.Borough)) // color option
 
-        // draw bottom 'complaints' text
+        // draw bottom 'Borough' text
         // MUST also define margins variable up at the top of code
-        svg.selectAll("text.Complaints")
+        svg.selectAll("text.Borough")
         .data(data)
         .join("text")
-        .attr("class", 'Complaints')
-        .attr("x", d => xScale(d.Complainst) + (xScale.bandwidth() / 2))
+        .attr("class", 'Borough')
+        .attr("x", d => xScale(d.Borough) + (xScale.bandwidth() / 2))
         .attr("y", height - margins.bottom)
         .attr("dy", "1em") // adjust the text a bit lower down
         .attr("text-anchor", 'middle') // set the x/y to refer to the middle of the word
-        .text(d => d.Complaints) // set the text
+        .text(d => d.Borough) // set the text
 
         // extras: chart label
         svg.append("text")      
         .attr("x",  width / 2 )
         .attr("y",  height-250 )
         .style("text-anchor", "middle")
-        .text("squirrel Complaints observed");
+        .text("squirrel Borough observed");
 
-        // draw bottom 'Complaints' text
-        svg.selectAll("text.Complaints")
+        // draw bottom 'Borough' text
+        svg.selectAll("text.Borough")
           .data(data)
           .join("text")
-          .attr("class", 'Complaints')
-          .attr("x", d => xScale(d.Complaints) + (xScale.bandwidth() / 2))
+          .attr("class", 'Borough')
+          .attr("x", d => xScale(d.Borough) + (xScale.bandwidth() / 2))
           .attr("y", height - margins.bottom)
           .attr("dy", "1em") // adjust the text a bit lower down
           .attr("text-anchor", 'middle') // set the x/y to refer to the middle of the word
-          .text(d => d.Complaints) // set the text
+          .text(d => d.Borough) // set the text
 
         // draw top 'count' text
         svg.selectAll("text.count")
           .data(data)
           .join("text")
           .attr("class", 'count')
-          .attr("x", d => xScale(d.Complaints) + (xScale.bandwidth() / 2))
+          .attr("x", d => xScale(d.Borough) + (xScale.bandwidth() / 2))
           .attr("y", d => yScale(d.count))
           .attr("dy", "1em") // adjust the text a bit lower down
           .attr("text-anchor", 'middle') // set the x/y to refer to the middle of the word
