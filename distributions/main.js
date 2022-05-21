@@ -62,25 +62,25 @@ function init() {
   const yAxis = d3.axisLeft(yScale)
 
   // + UI ELEMENT SETUP
-  const selectElement = d3.select("#dropdown")
+  //const selectElement = d3.select("#dropdown")
 
-  selectElement.selectAll("option")
-               .data([{key: "TotalComplaints", label: "All"}, 
-                     {key: "FelonyAssaultComplaints", label: "Felony Assault"},
-                     {key: "RapeComplaints", label: "Rape"},
-                     {key: "MurderComplaints", label: "Murder"}])
-               .join("option")
-               .attr("value", d => d.key)
-               .text(d => d.label)
+//   selectElement.selectAll("option")
+//                .data([{key: "TotalComplaints", label: "All"}, 
+//                      {key: "FelonyAssaultComplaints", label: "Felony Assault"},
+//                      {key: "RapeComplaints", label: "Rape"},
+//                      {key: "MurderComplaints", label: "Murder"}])
+//                .join("option")
+//                .attr("value", d => d.key)
+//                .text(d => d.label)
  
-   selectElement.on("change", event =>
-   { 
-     // console.log("something changed")
-     state.selectedComplaint = event.target.value
-     console.log(event.target.value)
-     draw();
-   });
- console.log(state.selectedComplaint)
+//    selectElement.on("change", event =>
+//    { 
+//      // console.log("something changed")
+//      state.selectedComplaint = event.target.value
+//      console.log(event.target.value)
+//      draw();
+//    });
+//  console.log(state.selectedComplaint)
 
   // + CREATE SVG ELEMENT
   svg = d3.select("#container")
