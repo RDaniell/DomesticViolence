@@ -1,6 +1,6 @@
 const width = window.innerWidth * .8;
 const height = window.innerHeight *.8;
-const margin = {top: 15, bottom: 10, left: 10, right: 10};
+const margin = { top: 15, bottom: 10, left: 10, right: 10};
 
 let svg;
 let xScale;
@@ -12,8 +12,8 @@ let state = {
   selection: "all"
 };
 
-
-d3.csv('../data/Reportsin2021.csv', d3.autoType).then(data => {
+d3.csv('../data/Reportsin2021.csv', d3.autoType).
+then(data => {
     console.log("data", data);
     state.data = data;
     init();
@@ -96,7 +96,7 @@ function draw() {
           .style("top", event.pageY -10 + "px")
           .style("left", event.pageX + 10 + "px")
         })
-        .on("mouseout", function(event, d) {
+        .on("mouseout", function(event, d){
           tooltip
           .html(``)
           .style("visibility", "hidden");
