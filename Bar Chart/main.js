@@ -114,7 +114,7 @@ d3.csv('../data/Reports in 2021.csv', d3.autoType).then(data => {
         .attr("text-anchor", 'middle') // set the x/y to refer to the middle of the word
         .text(d => d.Borough) // set the text
 
-        // // extras: chart label (title)
+        // // extras: chart label
         // svg.append("text")      
         // .attr("x",  width / 2 )
         // .attr("y",  height-250 )
