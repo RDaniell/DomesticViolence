@@ -1,22 +1,24 @@
-// 1 - VARIABLES - declare initial variables and globals
-
-// constants for our graphics area width and height
-// add margins to facilitate per-bar labeling
-
 const width = window.innerWidth * .8;
-const height = window.innerHeight / 3;
+const height = window.innerHeight *.8;
 const margins = { top: 10, bottom: 25, left: 10, right: 10 };
 
+let svg;
+let xScale;
+let yScale;
 
-// 2 - DATA - load in our data 
-
-// call in our csv data using d3
-// then add next steps with '.then' to make data usable
-// you can view the data output from this in console in browser
+let state = {
+  data:[],
+  selection: "all"
+};
 
 
 d3.csv('../data/Reports in 2021.csv', d3.autoType).then(data => {
-    console.log("data", data)
+    console.log("data", data);
+    state.data = raw_data;
+    init();
+});
+
+function init() {
 
     
     // 3 - SCALES - define visual x and y scales
@@ -39,109 +41,79 @@ d3.csv('../data/Reports in 2021.csv', d3.autoType).then(data => {
     // X range saying "let's go from zero position to..."
     // Y range saying "max lowpoint of ___ then back to zero"
 
-    const xScale = d3.scaleBand()
-    .domain(data.map(d=> d.Borough))
-    .range([0, width])
+    xScale = d3.scaleBand()
+    .domain(state.data.map(d=> d.Borough))
+    .range([margin.left, width-margin.right])
+    .paddingInner(.4)
 
  
-    const yScale = d3.scaleLinear()
-    .domain([0, d3.max(data, d=> d.count)]) // domain relates to data
-    .range([height, 0])  // range relates to visuals
-
-        // see color scales reference here: https://github.com/d3/d3-scale-chromatic
-
-    const colorScale = d3.scaleOrdinal(d3.schemeDark2)
-    .domain(data.map(d=> d.Borough))
-    // can define with your own range per category and empty parens
-    // or can define using d3.scheme__ in parens
-    //.range(["aqua", "lightblue", "blue","darkblue","black"])
+    yScale = d3.scaleLinear()
+    .domain([0, d3.max(state.data, d=> d.count)]) // domain relates to data
+    .range([height-margin.bottom, margin.top])  // range relates to visuals
 
 
-    // 4 - ELEMENTS - append/add elements into HTML via JS
+    const container = d3.select("#container")
+    .style("position", "relative");
 
-    // container, canvas, pasteboard
-    // add SVG by declaring a variable const
-    // using d3.select on your <div> id
-    // then have JS inject it into HTML by .append
-
-    const svg = d3.select("#container")
+    svg = container
     .append("svg")
     .attr("width", width)
     .attr("height", height)
+    .style("position", "relative");
 
-    // 5 - SELECT-JOIN-DRAW - Select ELEMENTS and JOIN data to them - data-to-pixels
+    tooltip = d3.select("body")
+    .append("div")
+    .attr("class","tooltip")
+    .style("z-index","10")
+    .style("position","absolute")
+    .style("visibility","hidden")
+    .style("opacity",0.08)
+    .style("padding","8px")
+    .text("tooltip");
 
+    const dropdown = d3.select("dropdown")
 
-    // rects, graphics - joined to our data
-    // first SELECT element to work with and choose graphic/rect
-    // then reference DATA desired
-    // then JOIN the data to create graphics/rects/bars
-    // then add properties to display the bars
-    // note you select all even before rects are created
-    // d3 then reconciles data = rects, resolving that
-    // it creates a rect/graphic for each data object
-    // note the syntax again is the "." for chaining
+    dropdown.selectAll("options")
+    .data(["all","Manhattan","Bronx","Queens","Brooklyn","Staten Island"])
+    .join("option")
+    .attr("value", d => d)
+    .text(d => d)
 
-    // 6 - ATTRIBUTES - Continue to add needed and desired attributes to draw
+    dropdown.on("change", event => {
+      state.selection = event.target.value
+      console.log(state.selection)
+      draw();
+    })
 
-    // add DATA-DRIVEN attributes and visual configuration attributes to your graphics
-    // make a relationship to the xScale data
-    // make a relationship to the yScale data
-    // change the width to relate to your xSCALE band so that it draws to data spec
-    // change the height to relate to your ySCALE band so that it draws to data spec
-    // note that yScale needs to be SUBTRACTED from the total height due to 0,0 position
-    // less data-driven more interpretive/aesthetic styling can be added as attributes
+    draw();
+  }
+function draw() {
 
+  const filteredData = stat.data.filteredData(d => state.selection === d.activity || state.
+    selection === "all")
+    console.log(filteredData)
 
         svg.selectAll("rect")
-        .data(data)
+        .data(filteredData)
         .join("rect")
-        .attr("width", xScale.bandwidth()-30)
-        .attr("height", d=> height - yScale(d.count))
-        .attr("x", d=>xScale(d.Borough)+15)
+        .attr("class", "bar")
+        .attr("width", xScale.bandwidth)
+        .attr("height", d=> height - margin.bottom - yScale(d.count))
+        .attr("x", d=>xScale(d.Borough))
         .attr("y", d=>yScale(d.count))
-        .attr("fill", d => colorScale(d.Borough)) // color option
+        .attr("fill", "purple") // color option
+        .on("mouseover", function(event,d,i){
+          tooltip
+          .html(`<div>activity: ${d.Borough}</
+          div><div>sightings: ${d.count}</div>`)
+          .style("visibiliy", "visible")
+          .style("opacity", .8)
+          .style("background","yellow")
+        })
+        .on("mouseout", function(event, d){
+          tooltip
+          .html(``)
+          .style("visibility", "hidden")
+        })
 
-        // draw bottom 'Borough' text
-        // MUST also define margins variable up at the top of code
-        svg.selectAll("text.Borough")
-        .data(data)
-        .join("text")
-        .attr("class", 'Borough')
-        .attr("x", d => xScale(d.Borough) + (xScale.bandwidth() / 2))
-        .attr("y", height - margins.bottom)
-        .attr("dy", "1em") // adjust the text a bit lower down
-        .attr("text-anchor", 'middle') // set the x/y to refer to the middle of the word
-        .text(d => d.Borough) // set the text
-
-        // // extras: chart label
-        // svg.append("text")      
-        // .attr("x",  width / 2 )
-        // .attr("y",  height-250 )
-        // .style("text-anchor", "middle")
-        // .text("Boroughs with murders in 2021");
-
-        // draw bottom 'Borough' text
-        svg.selectAll("text.Borough")
-          .data(data)
-          .join("text")
-          .attr("class", 'Borough')
-          .attr("x", d => xScale(d.Borough) + (xScale.bandwidth() / 2))
-          .attr("y", height - margins.bottom)
-          .attr("dy", "1em") // adjust the text a bit lower down
-          .attr("text-anchor", 'middle') // set the x/y to refer to the middle of the word
-          .text(d => d.Borough) // set the text
-
-        // draw top 'count' text
-        svg.selectAll("text.count")
-          .data(data)
-          .join("text")
-          .attr("class", 'count')
-          .attr("x", d => xScale(d.Borough) + (xScale.bandwidth() / 2))
-          .attr("y", d => yScale(d.count))
-          .attr("dy", "1em") // adjust the text a bit lower down
-          .attr("text-anchor", 'middle') // set the x/y to refer to the middle of the word
-          .text(d => d3.format(",")(d.count)) // set the text, add a formatter to properly format numbers: https://github.com/d3/d3-format
-
- 
-})
+      }
