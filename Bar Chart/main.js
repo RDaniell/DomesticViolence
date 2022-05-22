@@ -8,6 +8,7 @@ let yScale;
 
 let state = {
   data:[],
+
   selection: "all"
 };
 
@@ -19,27 +20,6 @@ d3.csv('../data/Reports in 2021.csv', d3.autoType).then(data => {
 });
 
 function init() {
-
-    
-    // 3 - SCALES - define visual x and y scales
-
-    // create SCALES first using variables
-    // each scale needs a scale type
-    // X Scale is type categorical, based on Borough data
-    // for X categorical type use d3.scaleBand
-    // Y Scale is type continuous quantitative numeric
-    // for Y numeric type use d3.scaleLinear
-    // for each scale need a Domain and a Range
-    // DOMAIN is your DATA categories/min/max
-    // RANGE is your VISUAL categories/min/max
-    // scale provides translator between data and visuals
-    // for X scale range - visual min 0 and max the window width
-    // for X scale domain - our Borough types
-    // x domain as "running" "chasing" but pull dynamic data
-    // y scale linear so Domain is max and min values to display
-    // frequently desired linear min value is 0
-    // X range saying "let's go from zero position to..."
-    // Y range saying "max lowpoint of ___ then back to zero"
 
     xScale = d3.scaleBand()
     .domain(state.data.map(d=> d.Borough))
@@ -89,10 +69,12 @@ function init() {
   }
 function draw() {
 
-  const filteredData = stat.data.filteredData(d => state.selection === d.activity || state.
+  const filteredData = state.data
+  .filter(d => state.selection === d.Borough || state.
     selection === "all")
     console.log(filteredData)
 
+    
         svg.selectAll("rect")
         .data(filteredData)
         .join("rect")
@@ -104,16 +86,20 @@ function draw() {
         .attr("fill", "purple") // color option
         .on("mouseover", function(event,d,i){
           tooltip
-          .html(`<div>activity: ${d.Borough}</
+          .html(`<div>Borough: ${d.Borough}</
           div><div>sightings: ${d.count}</div>`)
           .style("visibiliy", "visible")
           .style("opacity", .8)
           .style("background","yellow")
         })
-        .on("mouseout", function(event, d){
+        .on("mousemove", function(event){
+          tooltip
+          .style("top", event.pageY -10 + "px")
+          .style("left", event.pageX + 10 + "px")
+        })
+        .on("mouseout", function(event, d) {
           tooltip
           .html(``)
-          .style("visibility", "hidden")
-        })
-
+          .style("visibility", "hidden");
+        });
       }
