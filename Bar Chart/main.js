@@ -1,6 +1,6 @@
 const width = window.innerWidth * .8;
 const height = window.innerHeight *.8;
-const margins = { top: 10, bottom: 25, left: 10, right: 10 };
+const margin = {top: 15, bottom: 10, left: 10, right: 10};
 
 let svg;
 let xScale;
@@ -13,9 +13,9 @@ let state = {
 };
 
 
-d3.csv('../data/Reports in 2021.csv', d3.autoType).then(data => {
+d3.csv('../data/Reportsin2021.csv', d3.autoType).then(data => {
     console.log("data", data);
-    state.data = raw_data;
+    state.data = data;
     init();
 });
 
@@ -28,8 +28,8 @@ function init() {
 
  
     yScale = d3.scaleLinear()
-    .domain([0, d3.max(state.data, d=> d.count)]) // domain relates to data
-    .range([height-margin.bottom, margin.top])  // range relates to visuals
+    .domain([0, d3.max(state.data, d=> d.count)])// domain relates to data
+    .range([height-margin.bottom, margin.top])// range relates to visuals
 
 
     const container = d3.select("#container")
@@ -74,7 +74,6 @@ function draw() {
     selection === "all")
     console.log(filteredData)
 
-    
         svg.selectAll("rect")
         .data(filteredData)
         .join("rect")
