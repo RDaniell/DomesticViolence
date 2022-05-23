@@ -16,8 +16,14 @@ h1 {
   font-size: 2.1em;
 }
 
+h2 {
+  font-style: bold;
+  font-size: 2.1em;
+  color: rgb(129, 42, 141);
+}
+
 .leaflet-popup-content-wrapper {
-  background-color: rgb(161, 5, 161);
+  background-color: rgb(192, 87, 233);
 }
 .leaflet-popup-tip {
 background-color: rgb(pink);
@@ -25,5 +31,5 @@ background-color: rgb(pink);
 
 .popup {
   font-family: 'Lucida Sans Unicode'
-  font-size: 2.1em;
-}
+  font-size: 2.1em
+};

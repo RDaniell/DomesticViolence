@@ -35,13 +35,14 @@ console.log(data)
 for (var i in data) {
     var row = data[i];
 
-    let popupContent = "<div class=popup"+'<p>'+'Precinct: '+row.Precinct+"<p>"+"Number of Language Services : "+row.LanguageServices+"<br>"+"Program Hours : "+row.PROGRAMHOURS+"</p>"+"<p>"+"First Language : "+row.FIRSTLANGUAGE+"<br>"+"Second Language : "+row.SECONDLANGUAGE+"</p>"+"</div>";
+    let popupContent = "<div class=popup"+'<p>'+row.Precinct+"<p>"+"Neighborhood : "+row.NTA+"<p>"+"Number of Language Services : "+row.LanguageServices+"<br>"+"<p>"+"First Language : "+row.FIRSTLANGUAGE+"<br>"+"Second Language : "+row.SECONDLANGUAGE+"<br>"+"Third Language : "+row.THIRDLANGUAGE+"<br>"+"Fourth Language : "+row.FOURTHLANGUAGE+"<br>"+"Fifth Language : "+row.FIFTHLANGUAGE+
+    "</div>";
 
     let marker = L.circleMarker([row.LATITUDE, row.LONGITUDE],{
 
 radius: 7,
-fillColor: "Purple",
-color: "blue",
+fillColor: "purple",
+color: "orange",
 weight: 1,
 opacity:0.8,
 fillOpacity:0.6
