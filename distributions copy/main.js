@@ -1,129 +1,110 @@
-/* CONSTANTS AND GLOBALS */
-const width = window.innerWidth*0.8,
-      height = window.innerHeight*0.8,
-      margin = {top:10,bottom:30,left:40,right:10},
-      radius = 2;
+/**
+ * CONSTANTS AND GLOBALS
+ * */
+ const width = window.innerWidth * 0.9,
+ height = window.innerHeight * 0.7,
+ margin = { top: 20, bottom: 50, left: 60, right: 40 };
 
-// these variables allow us to access anything we manipulate in init() but need access to in draw().
-// All these variables are empty before we assign something to them.
 let svg;
-let xScale;
-let yScale;
-let colorScale;
-let sizeScale;
+let tooltip;
 
-/* APPLICATION STATE */
+/**
+* APPLICATION STATE
+* */
 let state = {
-  data: [],
-  selectedParty: "All" // + YOUR INITIAL FILTER SELECTION
+  data: null,
+  hover: null
 };
 
-/* LOAD DATA */
-d3.csv("../data/DV-NYPD-Radiorun.csv", d3.autoType).then(raw_data => {
-  // + SET YOUR DATA PATH
-  console.log("data", raw_data);
-  // save our data to application state
-  state.data = raw_data;
+/**
+* LOAD DATA
+* */
+d3.csv("../data/Reportsin2021.csv", d3.autotype).then(data => {
+  state.data = data;
+  console.log(state.data)
   init();
 });
 
-/* INITIALIZING FUNCTION */
-// this will be run *one time* when the data finishes loading in
+/**
+* INITIALIZING FUNCTION
+* this will be run *one time* when the data finishes loading in
+* */
 function init() {
-  // + SCALES
-  xScale = d3.scaleLinear()
-             .domain(d3.extent(state.data, d => d.Precinct))
-             .range([margin.left,width-margin.right])
 
-  yScale = d3.scaleLinear()
-             .domain(d3.extent(state.data, d => d.RadioRuns))
-             .range([height-margin.bottom, margin.top])
+const container = d3.select("#container")
+  .style("position","relative");
 
-  colorScale = d3.scaleOrdinal()
-                 .domain(["FelonyAssaultComplaints", "RapeComplaints", "MurderComplaints"])
-                 .range(["red", "blue", "purple"])
+svg = container 
+  .append("svg")
+  .attr("width", width)
+  .attr("height", height);
 
-  sizeScale = d3.scaleLinear()
-                    .domain(d3.extent(state.data, d => d.TotalComplaints))
-                    .range([1,10])
+tooltip = container.append("div")
+  .attr("class", "tooltip")
+  .style("top",0)
+  .style("left",0)
+  .style("color", "white")
+  .style("position", "absolute");
 
-  // + AXES
-  const xAxis = d3.axisBottom(xScale)
-  const yAxis = d3.axisLeft(yScale)
+const root = d3.hierarchy(state.data)
+  .sum(d => d.value)
+  .sort((a,b) => b.value - a.value);
+  console.log(root)
 
-  // + UI ELEMENT SETUP
-  const selectElement = d3.select("#dropdown")
+const treeLayout = d3.treemap()
+  .size([
+  width - margin.left - margin.right,
+  height - margin.top - margin.bottom])
+  .paddingInner(2);
 
-  selectElement.selectAll("option")
-               .data([{key: "TotalComplaints", label: "All"}, 
-                     {key: "FelonyAssaultComplaints", label: "FelonyAssaultComplaints"},
-                     {key: "RapeComplaints", label: "RapeComplaints"},
-                     {key: "MurderComplaints", label: "MurderComplaints"}])
-               .join("option")
-               .attr("value", d => d.key)
-               .text(d => d.label)
- 
-   selectElement.on("change", event =>
-   { 
-     // console.log("something changed")
-     state.selectedParty = event.target.value
-     console.log(event.target.value)
-     draw();
-   });
- console.log(state.selectedParty)
+  const tree = treeLayout(root)
+  const leaves = tree.leaves()
 
-  // + CREATE SVG ELEMENT
-  svg = d3.select("#container")
-          .append("svg")
-          .attr("width", width)
-          .attr("height", height)
+  console.log(tree)
+  console.log(leaves)
 
-  // + CALL AXES
-  svg.append("g")
-     .attr("transform", `translate(0, ${height - margin.bottom})`)
-     .call(xAxis);
+  const leafGroups = svg
+    .selectAll("g")
+    .data(leaves)
+    .join("g")
+    .attr("transform", d => `translate(${d.x0}, ${d.y0})`)
 
-  svg.append("g")
-     .attr("transform", `translate(${margin.left}, 0)`)
-     .call(yAxis)
-  
-     draw(); // calls the draw function
+  leafGroups.append("rect")
+    .attr("fill", "purple")
+    .attr("stroke", "gray")
+    .attr("width", d => d.x1 - d.x0)
+    .attr("height", d => d.y1 - d.y0)
+
+  leafGroups
+    .on("mouseenter", (event, d) => {
+      state.hover = {
+        position: [d.x0, d.y0],
+        Borough: d.data.Borough
+      }
+      draw()
+      console.log(state.hover)
+    })
+    .on("mouseleave", () => {
+      state.hover = null
+      draw();
+      console.log(state.hover)
+    })
+
+  draw(); // calls the draw function
 }
 
-/* DRAW FUNCTION */
-// we call this every time there is an update to the data/state
+/**
+* DRAW FUNCTION
+* we call this every time there is an update to the data/state
+* */
 function draw() {
+  if (state.hover) {
+    tooltip
+    .html(`<div>${state.hover.Borough}</div>`)
+    .transition()
+    .duration(400)
+    .style("opacity", 0.9)
+    .style("transform",`translate(${state.hover.position[0]}px,${state.hover.position[1]}px)`)
 
-  // + FILTER DATA BASED ON STATE
-  const filteredData = state.data
-     .filter(d => state.selectedParty === d.urban_class || state.selectedParty === "All")
-     console.log(filteredData)
-     
-  const dot = svg
-    .selectAll("circle")
-    .data(filteredData, d => d.id)
-    .join(
-      // + HANDLE ENTER SELECTION
-      enter => enter
-      .append("circle")
-      .attr("r", 0)
-      .attr("cx", margin.left)
-      .attr("cy", height-margin.bottom)
-      .attr("fill", "black")
-      .call(enter => enter
-        .transition()
-        .duration(1000)
-        .attr("r", d => sizeScale(d.TotalComplaints))
-        .attr("cx", d => xScale(d.Precinct))
-        .attr("cy", d => yScale(d.RadioRuns))
-        .attr("fill", d => colorScale(d.urban_class)),
-
-      // + HANDLE UPDATE SELECTION
-      update => update,
-
-      // + HANDLE EXIT SELECTION
-      exit => exit
-        .remove()
-      )
-    );
+  }
 }

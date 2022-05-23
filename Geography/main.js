@@ -52,6 +52,12 @@ fillOpacity:0.6
 
 marker.addTo(map);
 
+
+
+
+
+
+
 }
 
         }

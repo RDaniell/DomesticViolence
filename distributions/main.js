@@ -149,5 +149,6 @@ svg.append("text")
 .text("Number of Cases reported")
 
 
+
     )
       }
