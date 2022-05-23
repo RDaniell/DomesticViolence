@@ -1,2 +1,16 @@
-data
-1
+Borough,Year,Count
+Bronx,2019,17
+Queens,2019,14
+Brooklyn,2019,11
+Manhattan,2019,11
+Staten Island,2019,6
+Bronx,2020,16
+Queens,2020,15
+Brooklyn,2020,13
+Manhattan,2020,11
+Staten Island,2020,3
+Brooklyn,2021,12
+Manhattan,2021,10
+Bronx,2021,7
+Queens,2021,7
+Staten Island,2021,1
