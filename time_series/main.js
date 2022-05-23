@@ -18,20 +18,17 @@ let state = {
 
 /* LOAD DATA */
 // + SET YOUR DATA PATH
-d3.csv('../data/DV-NYPD-Radiorun.csv', d => {
+d3.csv('../data/data1.csv', d => {
   
   const formattedObj = {
     Borough: d.Borough,
-    RadioRuns: +d.RadioRuns,
-    year: new Date(+d.Year, 01, 01) // (year, month, day)
+    Count: +d.Count,
+    year: new Date(+d.Year) // (year, month, day)
   }
   return formattedObj
 })
   .then(data => {
     console.log("loaded data:", data);
-    function sortByCountryDateAscending(a, b) {}
-      data = data.sort(sortByCountryDateAscending);
-      console.log("sorted data:",data);
     state.data = data;
     init();
   });
@@ -45,7 +42,7 @@ xScale = d3.scaleTime()
 .range([margin.left, width - margin.right])
 
 yScale = d3.scaleLinear()
-.domain(d3.extent(state.data, d=> d.RadioRuns)) // [min, max]
+.domain(d3.extent(state.data, d=> d.Count)) // [min, max]
 .range([height-margin.bottom, margin.top])
 
 // AXES
@@ -100,12 +97,12 @@ function draw() {
   .filter(d=> state.selection === d.Borough)
 
   yScale
-  .domain(d3.extent(filteredData, d=> d.RadioRuns))
+  .domain(d3.extent(filteredData, d=> d.Count))
 
   // + DRAW LINE AND/OR AREA
   const lineFunction = d3.line()
     .x(d=> xScale(d.year))
-    .y(d=> yScale(d.RadioRuns))
+    .y(d=> yScale(d.Count))
 
   svg.selectAll("path.line")
     .data([filteredData])
