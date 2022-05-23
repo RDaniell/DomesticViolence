@@ -35,7 +35,7 @@ console.log(data)
 for (var i in data) {
     var row = data[i];
 
-    let popupContent = "<div class=popup"+'<p>'+row.Precinct+"<p>"+"Neighborhood : "+row.NTA+"<p>"+"Number of Language Services : "+row.LanguageServices+"<br>"+"<p>"+"First Language : "+row.FIRSTLANGUAGE+"<br>"+"Second Language : "+row.SECONDLANGUAGE+"<br>"+"Third Language : "+row.THIRDLANGUAGE+"<br>"+"Fourth Language : "+row.FOURTHLANGUAGE+"<br>"+"Fifth Language : "+row.FIFTHLANGUAGE+
+    let popupContent = "<div class=popup"+'<p>'+row.Precinct+"<p>"+"Neighborhood : "+row.NTA+"<p>"+"Number of Language Services : "+row.LanguageServices+"<br>"+"If second Language is filled with Language Access Line, the agency only has English speakers staff!"+"<p>"+"First Language : "+row.FIRSTLANGUAGE+"<br>"+"Second Language : "+row.SECONDLANGUAGE+"<br>"+"Third Language : "+row.THIRDLANGUAGE+"<br>"+"Fourth Language : "+row.FOURTHLANGUAGE+"<br>"+"Fifth Language : "+row.FIFTHLANGUAGE+
     "</div>";
 
     let marker = L.circleMarker([row.LATITUDE, row.LONGITUDE],{
